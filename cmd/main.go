@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
-	"github.com/mdayat/capstone-rest-service/internal/endpoints"
+	"github.com/mdayat/capstone-rest-service/internal/routes"
 )
 
 var Address string = "localhost:3000"
@@ -16,8 +16,8 @@ func main() {
 
 	router := httprouter.New()
 
-	router.GET("/students", endpoints.GetStudents)
-	router.GET("/students/:name", endpoints.GetStudent)
+	router.GET("/students", routes.GetStudents)
+	router.GET("/students/:name", routes.GetStudent)
 
 	err := http.ListenAndServe(Address, router)
 	if err != nil {
