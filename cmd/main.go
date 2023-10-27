@@ -17,7 +17,7 @@ func main() {
 	router := httprouter.New()
 
 	router.GET("/students", routes.GetStudents)
-	router.GET("/students/:name", routes.GetStudent)
+	router.GET("/students/:id", routes.GetStudent)
 
 	err := http.ListenAndServe(Address, router)
 	if err != nil {

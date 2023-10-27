@@ -37,5 +37,27 @@ func GetStudents(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 }
 
 func GetStudent(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Write([]byte("hello from student"))
+	header := w.Header()
+
+	origin := r.Header.Get("Origin")
+	header.Set("Access-Control-Allow-Origin", origin)
+
+	for i, student := range students {
+		if student.ID == ps.ByName("id") {
+			studentJSON, err := json.Marshal(student)
+			if err != nil {
+				log.Printf("Error encoding \"students\" to json: %s", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+
+			header.Set("Content-Type", "application/json")
+			w.Write(studentJSON)
+			break
+		} else {
+			if (i + 1) == len(students) {
+				w.WriteHeader(http.StatusNotFound)
+			}
+		}
+	}
 }
