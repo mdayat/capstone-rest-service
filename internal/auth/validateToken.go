@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
 )
 
@@ -18,7 +18,7 @@ type GoogleClaims struct {
 	FirstName string `json:"given_name"`
 	LastName  string `json:"family_name"`
 	Picture   string `json:"picture"`
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 var PUBLIC_KEY_URL = "https://www.googleapis.com/oauth2/v1/certs"
@@ -75,9 +75,9 @@ func ValidateGoogleJWT(tokenString string) (GoogleClaims, error) {
 		log.Printf("Error loading .env file %v", err)
 		return GoogleClaims{}, errors.New(err.Error())
 	}
-
+	
 	CLIENT_ID := os.Getenv("CLIENT_ID")
-	if claims.Audience != CLIENT_ID {
+	if claims.Audience[0] != CLIENT_ID {
 		return GoogleClaims{}, errors.New("aud is invalid")
 	}
 
@@ -85,7 +85,7 @@ func ValidateGoogleJWT(tokenString string) (GoogleClaims, error) {
 		return GoogleClaims{}, errors.New("iss is invalid")
 	}
 
-	if claims.ExpiresAt < time.Now().UTC().Unix() {
+	if claims.ExpiresAt.Unix() < time.Now().UTC().Unix() {
 		return GoogleClaims{}, errors.New("iss is invalid")
 	}
 
