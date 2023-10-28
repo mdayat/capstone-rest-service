@@ -8,7 +8,7 @@ import (
 	"github.com/mdayat/capstone-rest-service/internal/routes"
 )
 
-var Address string = "localhost:3000"
+var Address string = "localhost:8080"
 
 func main() {
 	flags := log.Ldate | log.Lshortfile
@@ -18,6 +18,8 @@ func main() {
 
 	router.GET("/students", routes.GetStudents)
 	router.GET("/students/:id", routes.GetStudent)
+
+	router.POST("/auth", routes.Login)
 
 	err := http.ListenAndServe(Address, router)
 	if err != nil {
