@@ -29,6 +29,7 @@ func GetStudents(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	if err != nil {
 		log.Printf("Error encoding \"students\" to json: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
@@ -48,6 +49,7 @@ func GetStudent(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 			if err != nil {
 				log.Printf("Error encoding \"students\" to json: %s", err)
 				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(err.Error()))
 				return
 			}
 
@@ -56,7 +58,10 @@ func GetStudent(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 			break
 		} else {
 			if (i + 1) == len(students) {
+				errMsg := "student not found"
+
 				w.WriteHeader(http.StatusNotFound)
+				w.Write([]byte(errMsg))
 			}
 		}
 	}
