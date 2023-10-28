@@ -3,10 +3,13 @@ package auth
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/joho/godotenv"
 )
 
 type GoogleClaims struct {
@@ -18,7 +21,6 @@ type GoogleClaims struct {
 	jwt.StandardClaims
 }
 
-var CLIENT_ID = "544363074975-hcct72321d66c2ohgi1mb2l1oid7ji5i.apps.googleusercontent.com"
 var PUBLIC_KEY_URL = "https://www.googleapis.com/oauth2/v1/certs"
 var ISS_1 = "accounts.google.com"
 var ISS_2 = "https://accounts.google.com"
@@ -68,6 +70,13 @@ func ValidateGoogleJWT(tokenString string) (GoogleClaims, error) {
 		return GoogleClaims{}, errors.New("google jwt is invalid")
 	}
 
+	err = godotenv.Load()
+	if err != nil {
+		log.Printf("Error loading .env file %v", err)
+		return GoogleClaims{}, errors.New(err.Error())
+	}
+
+	CLIENT_ID := os.Getenv("CLIENT_ID")
 	if claims.Audience != CLIENT_ID {
 		return GoogleClaims{}, errors.New("aud is invalid")
 	}

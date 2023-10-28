@@ -9,7 +9,7 @@ import (
 	"github.com/mdayat/capstone-rest-service/internal/auth"
 )
 
-func Login(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func Auth(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	defer r.Body.Close()
 
 	var tokenString string
@@ -24,7 +24,7 @@ func Login(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	claims, err := auth.ValidateGoogleJWT(tokenString)
 	if err != nil {
 		errMsg := "invalid google auth"
-		w.WriteHeader(http.StatusForbidden)
+		w.WriteHeader(http.StatusUnauthorized)
 		w.Write([]byte(errMsg))
 		return
 	}
