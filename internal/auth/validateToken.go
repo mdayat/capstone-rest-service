@@ -75,7 +75,7 @@ func ValidateGoogleJWT(tokenString string) (GoogleClaims, error) {
 		log.Printf("Error loading .env file %v", err)
 		return GoogleClaims{}, errors.New(err.Error())
 	}
-	
+
 	CLIENT_ID := os.Getenv("CLIENT_ID")
 	if claims.Audience[0] != CLIENT_ID {
 		return GoogleClaims{}, errors.New("aud is invalid")
