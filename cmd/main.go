@@ -19,7 +19,7 @@ func main() {
 	router.GET("/students", routes.GetStudents)
 	router.GET("/students/:id", routes.GetStudent)
 
-	router.POST("/auth", routes.Auth)
+	router.POST("/login", routes.Login)
 
 	err := http.ListenAndServe(Address, router)
 	if err != nil {
